@@ -1,16 +1,16 @@
 #!/bin/bash
 # alarm.sh
-# Usage: ./alarm.sh "$TIME $CUSTOM_MESSAGE"
+# Usage: ./alarm.sh "$TIME" "$CUSTOM_MESSAGE"
 #
 # Requires espeak TTS
 #
 # Written by William Chung (wiiliamchung360@gmail.com)
 #
 
-date=$( echo $1 | cut -d' ' -f1 )
-c_message=$( echo $1 | cut -d' ' -f2- | sed -e 's/ /_/g' )
+date=$1
+c_message=$2
 
-if [ -z $1 ]; then
+if [ -z $@ ]; then
   printf "What time are you setting this alarm for? "
   read date
   printf "Do you want to use a custom message? [y/N] "
@@ -19,7 +19,9 @@ if [ -z $1 ]; then
     printf "What would you want me to say? "
     read c_message
   fi
-elif [ $c_message = $date ]; then
+fi
+
+if [ -z $c_message ]; then
   echo "Okay! Will ring you on $(date --date="$date")."
   delay=$( echo $(( $(date --date="$date" +%s) - $(date +%s) )) )
   #echo $delay
